@@ -1,0 +1,50 @@
+import axios from 'axios';
+
+export const register = newUser => {
+    return axios
+        .post('api/register', newUser, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(res => {
+            console.log(res)
+            return res;
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const login = user => {
+    return axios
+        .post('api/login', user, {
+
+            email: user.email,
+            password: user.password
+        }, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(res => {
+            localStorage.setItem('usertoken', res.data.token)
+            console.log(res)
+
+            return res;
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const getProfile = () => {
+    console.log(localStorage.getItem("usertoken"))
+    return axios
+        .get('api/profile', {
+            headers: { Authorization: `Bearer ${localStorage.getItem("usertoken")}` }
+        })
+        .then(res => {            
+            console.log(res)
+            return res.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
